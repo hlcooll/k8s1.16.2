@@ -9,10 +9,55 @@ kubectl patch node mix3-test003 -p '{"spec" : {"unschedulable" :true}}'
 #重新纳入集群调度范围
 kubectl replace -f schedule_node.yaml
 
-
-
 #设置taint 不调度到node
 kubectl taint nodes mix3-test002 key1=value1:NoExecute
 kubectl taint nodes mix3-test003 key1=value1:NoExecute
 kubectl taint nodes mix3-test004 key1=value1:NoExecute
+
+## 去掉master的污点，使得master节点也可以创建容器
+## 该命令可选。如果不想让master执行node的角色，也可以不执行
+kubectl taint nodes --all node-role.kubernetes.io/master-
+
+------------------基于taint的驱离策略
+
+node.kubernetes.io/not-ready
+#节点还没有准备好,对应节点状态Ready值为false
+
+node.kubernetes.io/unreachable
+#节点控制器无法触及节点,对应节点状态ready值为Unknown
+
+node.kubernetes.io/out-of-disk
+#磁盘空间不足
+
+node.kubernetes.io/memory-pressure
+#节点存在内存压力
+
+node.kubernetes.io/disk-pressure
+#节点磁盘存在压力
+
+node.kubernetes.io/network-unavailable
+#节点网络不可用
+
+node.kubernetes.io/unschedulable
+#节点不可被调度
+
+node.cloudprovider.kubernetes.io/uninitialized
+
+----------有条件节点taint
+在kubernetes 1.12版,有条件为节点添加taint(TaintNodesByCondition)特征被提升为beta级别,节点生命周期控制器会自动根据节点的状态为节点添加taint.同样地调度器不检测node的状态,而是检测node 的污点(taint).这确保node的状态不影响哪些pod可以调度到此node上,用户可以选择通过添加相应的容忍(toleration)来忽略node的指定的问题(通过node的状态体现).注意TaintNodesByCondition仅添加NoSchedule类型的污点.NoExecute效果类型由TaintBasedEviction控制(此功能为1.13版本的beta功能)
+
+从kubernetes 1.8开始,DaemonSet controller自动以下类型的为所有的daemon添加NoSchedule效果类型的容忍(toleration),来防止DeamonSet分裂
+
+node.kubernetes.io/memory-pressure
+
+node.kubernetes.io/disk-pressure
+
+node.kubernetes.io/out-of-disk (only for critical pods)
+
+node.kubernetes.io/unschedulable (1.10 or later)
+
+node.kubernetes.io/network-unavailable (host network only)
+
+
+
 
