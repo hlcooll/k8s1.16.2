@@ -1,0 +1,18 @@
+#kubectl replace 命令完成对 Node 状态的修改
+kubectl replace -f unschedule_node.yaml
+
+#也可是不使用配置文件，直接使用 patch 命令完成
+kubectl patch node mix3-test004 -p '{"spec" : {"unschedulable" :true}}'
+kubectl patch node mix3-test002 -p '{"spec" : {"unschedulable" :true}}'
+kubectl patch node mix3-test003 -p '{"spec" : {"unschedulable" :true}}'
+
+#重新纳入集群调度范围
+kubectl replace -f schedule_node.yaml
+
+
+
+#设置taint 不调度到node
+kubectl taint nodes mix3-test002 key1=value1:NoExecute
+kubectl taint nodes mix3-test003 key1=value1:NoExecute
+kubectl taint nodes mix3-test004 key1=value1:NoExecute
+

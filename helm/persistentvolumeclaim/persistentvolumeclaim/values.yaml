@@ -1,0 +1,13 @@
+# Default values for redis.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: 
+volumeName: 
+storageClassName: 
+accessModes:
+- ReadWriteOnce
+annotations:
+  # volume.beta.kubernetes.io/storage-class: "nfs-client-provisioner"
+requests:
+  storage: 1Gi

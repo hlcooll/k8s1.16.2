@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: apollo-ingress
+spec:
+  rules:
+  - host: apollo.zthysms.com
+    http:
+      paths:
+      - backend:
+          serviceName: apollo-portal
+          servicePort: 8070
+

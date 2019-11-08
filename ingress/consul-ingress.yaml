@@ -1,0 +1,13 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: consul-ingress
+spec:
+  rules:
+  - host: consul.zthysms.com
+    http:
+      paths:
+      - backend:
+          serviceName: consul-consul-server
+          servicePort: 8500
+

@@ -1,0 +1,25 @@
+#安装——需安装的节点
+yum install -y nfs-utils
+
+#nfs节点安装
+mkdir -p /opt/u01/prod
+
+cat >>/etc/exports <<EOF
+/opt/u01 192.168.1.1/16(rw,sync,insecure,no_subtree_check,no_root_squash)
+EOF
+
+systemctl enable nfs-server
+systemctl start nfs-server
+showmount -e 192.168.100.114
+
+
+#helm安装nfs-pv
+helm install zt/nfs-client-provisioner \
+    --set rbac.create=true \
+    --set persistence.enabled=true \
+    --set storageClass.name=nfs-provisioner \
+    --set persistence.nfsServer=192.168.100.111 \
+    --set persistence.nfsPath=/opt/u01/prod \
+    --version 0.1.0 \
+    --name nfs-client-provisioner \
+    --namespace kube-system

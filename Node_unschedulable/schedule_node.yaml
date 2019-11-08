@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Node
+metadata:
+  name: mix3-test004
+  labels:
+    kubernetes.io/hostname: mix3-test004
+spec:
+  podCIDR: 10.0.0.0/16
+  unschedulable: false
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: mix3-test002
+  labels:
+    kubernetes.io/hostname: mix3-test002
+spec:
+  podCIDR: 10.0.0.0/16
+  unschedulable: false
+
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: mix3-test003
+  labels:
+    kubernetes.io/hostname: mix3-test003
+spec:
+  podCIDR: 10.0.0.0/16
+  unschedulable: false

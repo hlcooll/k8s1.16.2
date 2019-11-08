@@ -1,0 +1,25 @@
+
+#添加server模块
+helm init --upgrade --tiller-image registry.cn-hangzhou.aliyuncs.com/google_containers/tiller:v2.15.2 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts --service-account=tiller
+
+#创建helm权限管理
+kubectl create -f helm-rbac.yaml
+
+#启动helm仓库
+helm serve --address 192.168.100.114:8879 &
+
+#添加仓库名称
+helm repo add zt http://192.168.100.114:8879
+
+# 先移除原先的仓库
+helm repo remove stable
+
+# 添加新的仓库地址
+helm repo add stable https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts
+
+# 更新仓库
+helm repo update
+
+#上传文件到远程仓库
+helm repo index zt/nfs-client-provisioner --url http://192.168.100.114:8879
+------------------------------------------------------

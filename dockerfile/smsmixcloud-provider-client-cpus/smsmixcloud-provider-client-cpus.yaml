@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smsmixcloud-provider-client-cpus
+  labels:
+    app: smsmixcloud-provider-client-cpus
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: smsmixcloud-provider-client-cpus
+    spec:
+      containers:
+      - name: smsmixcloud-provider-client-cpus
+        image: harbor.zthysms.com/ztinfo/smsmixcloud-gateway:v1
+        ports:
+         - containerPort: 9999
+        imagePullPolicy: IfNotPresent
+  selector:
+    matchLabels:
+      app: smsmixcloud-provider-client-cpus
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smsmixcloud-provider-client-cpus
+  labels:
+    app: smsmixcloud-provider-client-cpus
+spec:
+  type: NodePort
+  ports:
+  - port: 9999
+    targetPort: 9999
+  selector:
+    app: smsmixcloud-provider-client-cpus

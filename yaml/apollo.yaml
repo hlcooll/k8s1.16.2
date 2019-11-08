@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apollo-configservice
+  labels:
+    name: apollo-configservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: apollo-configservice
+    spec:
+      containers:
+        - name: apollo-configservice
+          image: harbor.zthysms.com/ztinfo/apolo-confg:v1
+          ports:
+            - containerPort: 8081
+          imagePullPolicy: Always
+  selector:
+    matchLabels:
+      app: apollo-configservice
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apollo-configservice
+  labels:
+    app: apollo-configservice
+spec:
+  ports:
+    - port: 8081
+      targetPort: 8081
+  selector:
+    app: apollo-configservice
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apollo-adminservice
+  labels:
+    app: apollo-adminservice
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: apollo-adminservice
+    spec:
+      containers:
+        - name: apollo-adminservice
+          image: harbor.zthysms.com/ztinfo/apollo-admin:v1
+          ports:
+            - containerPort: 8091
+          imagePullPolicy: Always
+  selector:
+    matchLabels:
+      app: apollo-adminservice
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apollo-adminservice
+  labels:
+    app: apollo-adminservice
+spec:
+  type: NodePort
+  ports:
+    - port: 8091
+      targetPort: 8091
+  selector:
+    app: apollo-adminservice
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apollo-portal
+  labels:
+    app: apollo-portal
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: apollo-portal
+    spec:
+      containers:
+        - name: apollo-portal
+          image: harbor.zthysms.com/ztinfo/apollo-portal:v1
+          ports:
+            - containerPort: 8070
+          imagePullPolicy: Always
+  selector:
+    matchLabels:
+      app: apollo-portal
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apollo-portal
+  labels:
+    app: apollo-portal
+spec:
+  type: NodePort
+  ports:
+    - port: 8070
+      targetPort: 8070
+  selector:
+    app: apollo-portal
+

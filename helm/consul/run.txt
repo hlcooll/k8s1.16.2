@@ -1,0 +1,21 @@
+helm install zt/persistentvolumeclaim \
+    --set accessModes={ReadWriteOnce} \
+    --set requests.storage=2Gi \
+    --set storageClassName=nfs-provisioner \
+    --version 0.1.0 \
+    --name django-mysql-pvc \
+    --namespace zt-system
+
+        #创建consul-pvc(storageClass动态加载不需要)
+        helm install local/persistentvolumeclaim \
+            --set accessModes={ReadWriteOnce} \
+            --set requests.storage=2Gi \
+            --set storageClassName=nfs-provisioner \
+            --version 0.1.0 \
+            --name consul-pvc
+
+#创建官网consul
+helm install zt/consul\
+   --set server.storageClass=nfs-provisioner \
+   --set server.storage=2Gi \
+   --name consul

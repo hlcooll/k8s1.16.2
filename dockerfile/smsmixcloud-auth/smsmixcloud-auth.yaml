@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smsmixcloud-auth
+  labels:
+    app: smsmixcloud-auth
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: smsmixcloud-auth
+    spec:
+      containers:
+      - name: smsmixcloud-auth
+        image: harbor.zthysms.com/ztinfo/smsmixcloud-gateway:v1
+        ports:
+         - containerPort: 9999
+        imagePullPolicy: IfNotPresent
+  selector:
+    matchLabels:
+      app: smsmixcloud-auth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smsmixcloud-auth
+  labels:
+    app: smsmixcloud-auth
+spec:
+  type: NodePort
+  ports:
+  - port: 9999
+    targetPort: 9999
+  selector:
+    app: smsmixcloud-auth

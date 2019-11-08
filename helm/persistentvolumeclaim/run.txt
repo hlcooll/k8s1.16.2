@@ -1,0 +1,13 @@
+
+helm repo index zt/persistentvolumeclaim --url http://192.168.100.114:8879
+
+
+
+
+helm install zt/persistentvolumeclaim \
+    --set accessModes={ReadWriteOnce} \
+    --set requests.storage=2Gi \
+    --set storageClassName=nfs-provisioner \
+    --version 0.1.0 \
+    --name django-mysql-pvc \
+    --namespace zt-system

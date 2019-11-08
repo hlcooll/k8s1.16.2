@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Node
+metadata:
+  name: mix3-test004
+  labels:
+    kubernetes.io/hostname: mix3-test004
+spec:
+  unschedulable: true
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: mix3-test004
+  labels:
+    kubernetes.io/hostname: mix3-test002
+spec:
+  unschedulable: true
+
+---
+apiVersion: v1
+kind: Node
+metadata:
+  name: mix3-test004
+  labels:
+    kubernetes.io/hostname: mix3-test003
+spec:
+  unschedulable: true

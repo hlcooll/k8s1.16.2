@@ -1,0 +1,27 @@
+
+#pvc
+helm install zt/persistentvolumeclaim \
+    --set accessModes={ReadWriteOnce} \
+    --set requests.storage=2Gi \
+    --set storageClassName=nfs-provisioner \
+    --version 0.1.0 \
+    --name apollo-mysql-pvc 
+
+#创建mysql
+helm install zt/mysql \
+    --set persistence.enabled=true \
+    --set persistence.existingClaim=apollo-mysql-pvc  \
+    --set env.MYSQL_ROOT_PASSWORD=ztinfo2017 \
+    --set env.MYSQL_DATABASE=hello_django \
+    --set config.innodb_large_prefix=1 \
+    --set config.innodb_file_per_table=1 \
+    --set config.log_bin_trust_function_creators=1 \
+    --set config.character_set_server=utf8mb4 \
+    --set config.collation_server=utf8mb4_general_ci \
+    --set service.enabled=ture \
+    --version 0.1.0 \
+    --set service.type=NodePort \
+    --name apollo-mysql  
+
+#    --set service.type=NodePort (修改为外部端口)
+#    --namespace zt-system
